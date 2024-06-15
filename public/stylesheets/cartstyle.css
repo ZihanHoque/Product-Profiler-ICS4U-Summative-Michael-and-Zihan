@@ -1,0 +1,156 @@
+.screenContainer {
+  display: flex;
+  flex-direction: row;
+  width:100%;
+  height:80vh;
+  margin-top: 10vh;
+}
+
+.column1 {
+  width:68%;
+  height: 100%;
+  padding-left: 3%;
+  padding-right: 3%;
+  text-align: center;
+}
+
+.column2 {
+  width:32%;
+  height: 100%;
+  padding-left: 3%;
+  padding-right: 3%;
+}
+
+.headerText {
+  height:1em;
+  font-size: 24px;
+  padding-bottom: 5vh;
+}
+
+.header2Text {
+  height:1em;
+  font-size: 20px;
+  padding-bottom: 5vh;
+  /* width:100%; */
+}
+
+.column2 > button {
+  width: 100%;
+  height: 3em;
+  font-size: 30px;
+  font-weight: bold;
+  margin-top:40%;
+}
+
+.listContainer {
+  display:flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  max-height: 80vh;
+}
+
+.item {
+  display:flex;
+  height:30vh;
+  flex-direction: row;
+  border-color: black;
+  border-width: 10px;
+  border: solid;
+}
+
+textarea {
+  resize: none;
+  height: 75%;
+  width:94%;
+  font-size: 16px;
+  margin-left: 3%;
+  margin-right: 3%;
+}
+
+.tablecolumn1 {
+  width: 33%;
+  height: 100%;
+  text-align:center;
+}
+
+.tablecolumn2 {
+  width: 34%;
+  height: 100%;
+  text-align:center;
+}
+
+.commentBox {
+  height:75%;
+  display:flex;
+  flex-direction:column;
+  max-height: 75%;
+  width:94%;
+  font-size: 16px;
+  margin-left: 3%;
+  margin-right: 3%;
+  border-color:black;
+  border-width: 10px;
+  border: solid;
+  overflow-y: scroll;
+  text-align: left;
+}
+
+.tablecolumn3 {
+  width: 33%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.imageContainer {
+  margin-top:1vh;
+  height:24vh;
+}
+
+.image {
+  object-fit: contain;
+  height:auto;
+  max-height: 100%;
+  max-width: 100%;
+  width:auto;
+}
+
+.editButtonContainer {
+  width:50%;
+  height:70%;
+}
+
+.editButton {
+  height:auto;
+  max-height: 100%;
+  max-width: 100%;
+  width:auto;
+}
+
+.deleteButtonContainer {
+  width:50%;
+  height:70%;
+}
+
+.deleteButton {
+  height:auto;
+  max-height: 100%;
+  max-width: 100%;
+  width:auto;
+}
+
+.linkBox {
+  height:30%;
+  max-height: 30%;
+  display:flex;
+  flex-direction:column;
+  width:94%;
+  font-size: 16px;
+  margin-left: 3%;
+  margin-right: 3%;
+  border-color:black;
+  border-width: 10px;
+  border: solid;
+  overflow-y: scroll;
+  text-align: left;
+}

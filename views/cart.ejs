@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel='stylesheet' href='/stylesheets/cartstyle.css' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/javascripts/cart.js"> </script>
+  </head>
+  <body onload="loadCart()">
+    <div style="width:100%; height:2em; align-items: center;">
+      <!-- Navbar -->
+      <nav class="navbar bg-light">
+        <div class="container-fluid">
+          <label for="historyChange" class="btn" style="font-weight:bold; font-size:20px">Transaction History</label>
+          <input onclick="changePage('/history')" id="historyChange" type="button" style="display:none">
+
+          <label for="newItemChange" class="btn" style="font-weight:bold; font-size:20px;">Add New Item</label>
+          <input onclick="changePage('/items/create')" id="newItemChange" type="button" style="display:none">
+
+          <label for="cartChange" class="btn" style="font-weight:bold; font-size:20px; background-color:lightgray">Shopping Cart</label>
+          <input onclick="changePage('/cart')" id="cartChange" type="button" style="display:none">
+
+          <label for="logOut" class="btn" style="font-weight:bold; font-size:20px">Log Out</label>
+          <input onclick="changePage('/logout')" id="logOut" type="button" style="display:none">
+        </div>
+      </nav>
+    </div>
+    <div class="screenContainer">
+      <div class="column1">
+        <div>
+          <label class="headerText">Shopping List</label>
+        </div>
+        <div class="listContainer">
+          <table id="cart-display"> 
+          </table>
+        </div>
+      </div>
+      <div class="column2">
+        <button onclick="checkout()"> Record Transaction </button>
+        <button onclick="clearCart()"> Clear Cart </button>
+      </div>
+    </div>
+
+    <script> 
+      // request all incart==true items from server, then generate the cart display
+      function loadCart() {
+        var req = new XMLHttpRequest();
+        req.open("post", "/cart/load");
+        req.onload = () => {
+          // making the initial table which will contain all items
+          var table = document.getElementById("cart-display");
+          // showing each item
+          for (var Item of JSON.parse(req.response)) {
+
+            // making containers for items and styling them
+            var row = document.createElement("tr");
+            var cell = document.createElement("td");
+            var item = document.createElement("div");
+            item.className = "item";
+
+            // organizing the item data into 3 columns
+            var column1 = document.createElement("div");
+            column1.className = "tablecolumn1";
+            
+            
+            var column2 = document.createElement("div");
+            column2.className = "tablecolumn2";
+      
+            var column3 = document.createElement("div");
+            column3.className = "tablecolumn3";
+
+            // filling in each column
+            for (var i = 0; i < 3; i++) {
+              switch(i) {
+                case 0:
+                  // adding image
+                  var imageContainer = document.createElement("div");
+                  imageContainer.className = "imageContainer";
+                  var image = document.createElement("img");
+                  image.className = "image";
+                  // putt appropriate image based on if image was inputted
+                  if (Item.ImageDataURL) { // dodge the windows file not found icon
+                    image.src = Item.ImageDataURL;
+                  }
+                  else {
+                    image.src = "/images/no-image-icon-512x512-lfoanl0w.png";
+                  }
+
+                  imageContainer.appendChild(image);
+                  column1.appendChild(imageContainer);
+
+                  // adding date the item was last purchased
+                  var text = document.createTextNode(Item.LastPurchased.substring(0, 10));
+                  column1.appendChild(text);
+                  break;
+                case 1:
+                  // adding name of item
+                  var name = document.createTextNode(Item.Name);
+                  column2.appendChild(name);
+
+                  // adding comments on item
+                  // comment container
+                  var commentbox = document.createElement("table");
+                  commentbox.className = "commentBox";
+
+                  // adding each comment into the container
+                  for (var comment of Item.Comments) {
+                    var commentRow = document.createElement("tr");
+                    var commentData = document.createElement("td");
+      
+                    var text = document.createTextNode("- " + comment);
+      
+                    commentData.appendChild(text);
+                    commentRow.appendChild(commentData);
+                    commentbox.appendChild(commentRow);
+                  }
+                  
+                  
+                  column2.appendChild(commentbox);
+                  
+                  break;
+                case 2:
+                  // adding edit button
+                  var editButtonContainer = document.createElement("div");
+                  editButtonContainer.className = "editButtonContainer";
+                  
+                  var editButton = document.createElement("input");
+                  editButton.type = "image";
+                  editButton.className = "editButton";
+                  editButton.src = "/images/qubodup_16x16px-capable_black_and_white_icons_17.png";
+                  editButton.onclick = (e) => {toUpdatePage(e)};
+                  
+                  editButtonContainer.appendChild(editButton);
+                  column3.appendChild(editButtonContainer);
+
+                  // Adding delete button
+                  var deleteButtonContainer = document.createElement("div");
+                  deleteButtonContainer.className = "deleteButtonContainer";
+      
+                  var deleteButton = document.createElement("input");
+                  deleteButton.type = "image";
+                  deleteButton.className = "deleteButton";
+                  deleteButton.src = "/images/Trashcan-512.webp";
+                  deleteButton.onclick = (e) => {removeFromCart(e)};
+                  deleteButtonContainer.appendChild(deleteButton);
+                  column3.appendChild(deleteButtonContainer);
+
+                  // adding links
+                  var linkbox = document.createElement("table");
+                  linkbox.className = "linkBox";
+      
+                  for (var link of Item.Links) {
+                    var linkRow = document.createElement("tr");
+                    var linkData = document.createElement("td");
+      
+                    var text = document.createTextNode(link);
+      
+                    linkData.appendChild(text);
+                    linkRow.appendChild(linkData);
+                    linkbox.appendChild(linkRow);
+                  }
+      
+      
+                  column3.appendChild(linkbox);
+                  break;
+              }
+            }
+            item.appendChild(column1);
+            item.appendChild(column2);
+            item.appendChild(column3);
+            cell.appendChild(item);
+            row.appendChild(cell);
+            table.appendChild(row);
+          }
+        }
+        req.send();
+      }
+    </script>
+  </body>
+</html>

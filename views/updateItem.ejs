@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>replit</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="/stylesheets/newstyle.css" rel="stylesheet" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/javascripts/createItem.js"></script>
+  </head>
+  <body onload="prepUpdatePage()">
+
+    <div style="width:100%; height:2em; align-items: center;">
+      <nav class="navbar bg-light">
+        <div class="container-fluid">
+          <label for="historyChange" class="btn" style="font-weight:bold; font-size:20px">Transaction History</label>
+          <input onclick="changePage('/history')" id="historyChange" type="button" style="display:none">
+          
+          <label for="newItemChange" class="btn" style="font-weight:bold; font-size:20px; background-color:lightgray">Add New Item</label>
+          <input onclick="changePage('/items/create')" id="newItemChange" type="button" style="display:none">
+          
+          <label for="cartChange" class="btn" style="font-weight:bold; font-size:20px">Shopping Cart</label>
+          <input onclick="changePage('/cart')" id="cartChange" type="button" style="display:none">
+          
+          <label for="logOut" class="btn" style="font-weight:bold; font-size:20px">Log Out</label>
+          <input onclick="changePage('/logout')" id="logOut" type="button" style="display:none">
+        </div>
+      </nav>
+    </div>
+    <div>
+      <div class="screenContainer" style="z-index: 0;">
+        <div class="column1">
+          <div class="itemInput">
+            <label>New Item Name</label>
+          </div>
+
+          <div class="itemInput">
+          <input type="text" id="iName" placeholder=" *Enter new item name here*">
+          </div>
+
+          <div class="itemInput">
+            <label>New Item Description</label>
+          </div>
+
+          <div class="itemInput">
+          <textarea class="desc" id="desc" placeholder=" *Enter new item description here*"></textarea>
+          </div>
+          <div class="buttonContainer"> 
+            <button class="newLinkButton" type="submit" onclick="addNewLink()">New Link</button>
+            <button class="newCommentButton" type="submit" onclick="addNewComment()">New Comment</button>
+          </div>
+        </div>
+        <div class="column2">
+          <div class="itemInput">
+            <label>New Item Shop Link (max 3)</label>
+          </div>
+
+          <div class="itemInput" id="links-panel">
+            <input id="link1" type="text" placeholder="*Link*">
+          </div>
+
+          <div class="itemInput">
+            <label>New Item Comments (max 3)</label>
+          </div>
+          <div class="itemInput" id="comment-panel">
+          <textarea id="comm1" placeholder="*Comment*"></textarea>
+          </div>
+        </div>
+        <div class="column3">
+          <div class="itemInput">
+            <label id="imgButton" for="profilePic" class="btn" style="background-color:lightgray; border-color: black; border-width: 3px; width:100%;">Upload Image</label>
+            <input id="profilePic" style="display:none;" type="file" accept="image/*" onchange="setPreview();">
+            <div id="preview-container" class="preview-container">
+            </div>
+          </div>
+          <div class="ItemInput"> 
+            <label for="dateLastPurchased">Last Purchased:</label>
+            <input id="dateLastPurchased" type="date">
+          </div>
+          <div class="buttonContainer"> 
+            <button class="addButton" type="submit" onclick="updateItem()">UPDATE ITEM PROFILE</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function prepUpdatePage() {
+        setDate();
+        var HTMLparser = document.createElement("textarea");
+        HTMLparser.innerHTML = "<%= comments %>";
+        var comments = JSON.parse(HTMLparser.value);
+        HTMLparser.innerHTML = "<%= links %>";
+        var links = JSON.parse(HTMLparser.value);
+        HTMLparser.remove();
+    
+        document.getElementById("iName").value = "<%= itemName %>";
+        document.getElementById("desc").value = "<%= description %>";
+        document.getElementById("dateLastPurchased").value = "<%= lastPurchased %>";
+        
+        var dataURL = "<%= image %>"
+        if (dataURL.length > 0) {
+          var container = document.getElementById("preview-container");
+          var preview = document.createElement("img");
+          preview.src = dataURL;
+          container.appendChild(preview);
+        } 
+        else {
+          var container = document.getElementById("preview-container");
+          var preview = document.createElement("img");
+          preview.src = "/images/no-image-icon-512x512-lfoanl0w.png";
+          container.appendChild(preview);
+        }
+
+        document.getElementById("comm1").value = comments[0];
+        for (var i = 1; i < comments.length; i++) {
+          addNewComment(comments[i]);
+        }
+
+        document.getElementById("link1").value = links[0];
+        for (var i = 1; i < links.length; i++) {
+          addNewLink(links[i]);
+        }
+      }
+
+      function updateItem() {
+        if (document.getElementById("iName").value.length < 1) { // manual requirement validation because name field is important
+          alert("Missing Item Name");
+        } else {
+          var itemDetails = new FormData();
+          var purchaseDate = document.getElementById("dateLastPurchased").valueAsDate;
+          purchaseDate.setTime(purchaseDate.getTime() + (purchaseDate.getTimezoneOffset() * 60 * 1000));
+          var comments = [];
+          var links = [];
+
+          for (var i = 1; document.getElementById("comm" + i) != null; i++) {
+            comments.push(document.getElementById("comm" + i).value);
+          }
+          for (var j = 1; document.getElementById("link" + j) != null; j++) {
+            links.push(document.getElementById("link" + j).value);
+          }
+
+          itemDetails.append("ItemName", document.getElementById("iName").value);
+          itemDetails.append("Description", document.getElementById("desc").value);
+          itemDetails.append("Comments", JSON.stringify(comments));
+          itemDetails.append("Links", JSON.stringify(links));
+          itemDetails.append("LastPurchased", purchaseDate);
+          if (document.getElementById("preview-container").hasChildNodes()) {
+            itemDetails.append("ImageDataURL", document.getElementById("preview-container").children[0].src);
+          }
+
+          var req = new XMLHttpRequest();
+          req.open("post", "/items/update?id=<%= _id %>");
+          req.onload = () => {
+            if (req.response != "success") {
+              alert(req.response);
+            } else {
+              location = "/history";
+            }
+          }
+          req.send(itemDetails);
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,150 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+
+.transactionTable {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+.profile {
+  width: 29%;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color:#595959;
+}
+
+
+.dateLabel h3 {
+  color: #ffffff;
+  text-align: center;
+}
+
+.profileBody {
+  width: 96%;
+  margin-bottom: 10px;
+  background-color: #eeeeee;
+}
+
+.topSection {
+  height: 30vh;
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.bottomSection {
+  display: flex;
+  flex-flow: row wrap;
+  height: 30vh;
+  width: 100%;
+}
+
+.imageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 40%;
+  background-color: #78909c;
+}
+
+.imageContainer > img {
+  height: auto;
+  width: auto;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+/* thanks https://stackoverflow.com/questions/33219958/how-to-detect-aspect-ratio-of-an-image-in-css */
+
+.mainText {
+  height: 100%;
+  width: 60%;
+  color: #595959;
+}
+
+.comments {
+  width: 50%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.commentLabel {
+  text-align: center;
+}
+
+.commentContainer {
+  height:85%;
+  width:90%;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.commentContainer pre {
+  text-wrap: wrap;
+}
+
+.links {
+  width: 50%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.linkLabel {
+  text-align: center;
+}
+
+.linkContainer {
+  height:85%;
+  width:90%;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.linkContainer pre {
+  text-wrap: wrap;
+}
+
+.buttonContainer {
+  height:50%;
+  width:100%;
+}
+
+.buttonContainer button {
+  width: 33%;
+  height: 100%;
+}
+
+.profileButton img {
+  height: 100%;
+  object-fit: contain;
+}
+
+.searchContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 20vh;
+  width: 100%;
+  background-color: darkgray;
+  border: 5px solid black;
+}
+
+.searchContainer > #searchBar {
+  width: 70%;
+  font-size: 30px;
+}

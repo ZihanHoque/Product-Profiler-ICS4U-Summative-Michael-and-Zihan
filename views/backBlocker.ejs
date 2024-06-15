@@ -1,0 +1,17 @@
+-<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body onload="blocker()">
+    <script> 
+    // handles a few redirects using the clientside location property 
+    function blocker() {
+      if (location = "/logout") { // let them back if they sent a logout request
+        location = "/";
+      } else {
+        location = "/history"; // back blocked
+      }
+    }
+    </script>
+  </body>
+</html>
