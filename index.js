@@ -93,8 +93,10 @@ app.get("/history", (req, res) => {
   res.render("history", {user : sessionUser.Username});
 });
 
-app.post("/items/load", (req, res) => {
-  res.json(sessionUser.Items.sort((a, b) => b.LastPurchased.getTime() - a.LastPurchased.getTime())); // send the client an ordered list of the user's items to display in history
+app.post("/items/load", (req, res) => { 
+  res.json(sessionUser.Items.sort((a, b) => a.LastPurchased.toDateString() != b.LastPurchased.toDateString() ? b.LastPurchased.getTime() - a.LastPurchased.getTime() : a.Name.toLowerCase().localeCompare(b.Name.toLowerCase())
+ ));
+  // send the client an ordered list of the user's items to display in history, prioritizing last purchased date, then ordering alphabetically.
 });
 
 // serve the createItem page
@@ -184,7 +186,8 @@ app.post("/cart/load", (req, res) => {
       shoppingCart.push(Item);
     }
   }
-  res.json(shoppingCart.sort((a, b) => b.LastPurchased.getTime() - a.LastPurchased.getTime()));
+  // the "/items/load" sorting algorithm
+  res.json(shoppingCart.sort((a, b) => a.LastPurchased.toDateString() != b.LastPurchased.toDateString() ? b.LastPurchased.getTime() - a.LastPurchased.getTime() : a.Name.toLowerCase().localeCompare(b.Name.toLowerCase())));
 });
 
 // serve the cart page

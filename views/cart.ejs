@@ -153,10 +153,12 @@
                   for (var link of Item.Links) {
                     var linkRow = document.createElement("tr");
                     var linkData = document.createElement("td");
-      
+                    var linker = document.createElement("a");
+                    linker.href = "//"+link;
+                    linker.target = "_blank";
                     var text = document.createTextNode(link);
-      
-                    linkData.appendChild(text);
+                    linker.appendChild(text);
+                    linkData.appendChild(linker);
                     linkRow.appendChild(linkData);
                     linkbox.appendChild(linkRow);
                   }

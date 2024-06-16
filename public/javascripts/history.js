@@ -90,6 +90,7 @@ function makeProfile(Item) {
   for (var linkString of Item.Links) {
     var link = document.createElement("a");
     link.href = linkString;
+    link.target = "_blank";
     link.append(linkString);
     linkText.appendChild(link);
     linkText.append("\n");
