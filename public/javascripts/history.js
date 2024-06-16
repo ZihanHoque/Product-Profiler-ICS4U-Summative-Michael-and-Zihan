@@ -73,7 +73,7 @@ function makeProfile(Item) {
   commentContainer.classList.add("commentContainer");
   var commentText = document.createElement("pre");
   for (var comment of Item.Comments) {
-    commentText.append("" + comment + "\n"); // using pre so ordering is easier. realistically, its probably better to do this in a <ul>
+    commentText.append("" + comment + "\n"); // using pre so ordering is easier.
   }
   commentContainer.appendChild(commentText);
   comments.appendChild(commentContainer);
@@ -89,7 +89,7 @@ function makeProfile(Item) {
   var linkText = document.createElement("pre");
   for (var linkString of Item.Links) {
     var link = document.createElement("a");
-    link.href = linkString;
+    link.href = linkString; // WILL ASSUME THE GIVEN LINK IS FUNCTIONAL [i.e copied straight from the address bar with the https:// intact]. if it leads to nowhere, that's your fault, user.
     link.target = "_blank";
     link.append(linkString);
     linkText.appendChild(link);
